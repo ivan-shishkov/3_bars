@@ -1,8 +1,12 @@
 import json
+import os
 
 
-def load_data(filepath):
-    pass
+def load_json_data(filepath):
+    if not os.path.exists(filepath):
+        return None
+    with open(filepath, 'r') as file:
+        return json.load(file)
 
 
 def get_biggest_bar(data):
