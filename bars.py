@@ -28,7 +28,7 @@ def calculate_distance_to_bar(longitude, latitude):
         bar_latitude = bar_coordinates[1]
 
         return ((bar_longitude - longitude) ** 2 + (
-                    bar_latitude - latitude) ** 2) ** 0.5
+                bar_latitude - latitude) ** 2) ** 0.5
 
     return calculate
 
@@ -37,6 +37,19 @@ def get_nearest_bar(list_bars, longitude, latitude):
     get_distance_to_bar = calculate_distance_to_bar(longitude, latitude)
 
     return min(list_bars, key=get_distance_to_bar)
+
+
+def print_bar_info(bar):
+    bar_info = bar['properties']['Attributes']
+    print('Административный округ: ', bar_info['AdmArea'])
+    print('Район: ', bar_info['District'])
+    print('Адрес: ', bar_info['Address'])
+    print('Количество мест: ', bar_info['SeatsCount'])
+    print('Название: ', bar_info['Name'])
+    print('Телефон: ', bar_info['PublicPhone'][0]['PublicPhone'])
+
+    bar_coordinates = bar['geometry']['coordinates']
+    print('Координаты: ', bar_coordinates[0], bar_coordinates[1])
 
 
 if __name__ == '__main__':
