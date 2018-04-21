@@ -40,17 +40,24 @@ def get_nearest_bar(list_bars, longitude, latitude):
     return min(list_bars, key=get_distance_to_bar)
 
 
-def print_bar_info(bar):
+def print_bar_info(bar, feature):
+    print('\n' + '-' * 20)
+
+    print('Самый ' + feature + ' бар:')
+    print('-' * 20)
+
     bar_info = bar['properties']['Attributes']
+    print('Название: ', bar_info['Name'])
+    print('Количество мест: ', bar_info['SeatsCount'])
     print('Административный округ: ', bar_info['AdmArea'])
     print('Район: ', bar_info['District'])
     print('Адрес: ', bar_info['Address'])
-    print('Количество мест: ', bar_info['SeatsCount'])
-    print('Название: ', bar_info['Name'])
     print('Телефон: ', bar_info['PublicPhone'][0]['PublicPhone'])
 
     bar_coordinates = bar['geometry']['coordinates']
-    print('Координаты: ', bar_coordinates[0], bar_coordinates[1])
+    latitude = bar_coordinates[1]
+    longitude = bar_coordinates[0]
+    print('Координаты: {} с.ш.  {} в.д.'.format(latitude, longitude))
 
 
 def parse_command_line_arguments():
@@ -84,9 +91,10 @@ def run_script():
 
     list_bars = file_content['features']
 
-    print_bar_info(bar=get_biggest_bar(list_bars))
-    print_bar_info(bar=get_smallest_bar(list_bars))
-    print_bar_info(bar=get_nearest_bar(list_bars, latitude, longitude))
+    print_bar_info(bar=get_biggest_bar(list_bars), feature='большой')
+    print_bar_info(bar=get_smallest_bar(list_bars), feature='маленький')
+    print_bar_info(bar=get_nearest_bar(list_bars, latitude, longitude),
+                   feature='ближайший')
 
 
 if __name__ == '__main__':
