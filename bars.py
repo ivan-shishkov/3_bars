@@ -1,5 +1,5 @@
 import json
-import os
+import os.path
 import argparse
 
 
@@ -65,7 +65,8 @@ def print_info_about_bar(bar, feature):
     bar_coordinates = get_bar_coordinates(bar)
     bar_latitude = bar_coordinates['latitude']
     bar_longitude = bar_coordinates['longitude']
-    print('Координаты: {} с.ш.  {} в.д.'.format(bar_latitude, bar_longitude))
+    print('Координаты: {:.6f} с.ш.  {:.6f} в.д.'.format(bar_latitude,
+                                                        bar_longitude))
 
 
 def parse_command_line_arguments():
