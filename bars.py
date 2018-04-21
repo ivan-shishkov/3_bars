@@ -101,7 +101,11 @@ def run_script():
     latitude = arguments_from_command_line['latitude']
     longitude = arguments_from_command_line['longitude']
 
-    file_content = load_json_data(filename)
+    try:
+        file_content = load_json_data(filename)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        print('Неверный формат файла json')
+        return
 
     if not file_content:
         print('Не найден файл с исходными данными')
