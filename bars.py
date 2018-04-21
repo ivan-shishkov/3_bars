@@ -22,20 +22,21 @@ def get_smallest_bar(list_bars):
     return min(list_bars, key=get_seats_count_in_bar)
 
 
-def calculate_distance_to_bar(longitude, latitude):
+def create_calculator_of_distance_to_bar(latitude, longitude):
     def calculate(bar):
         bar_coordinates = bar['geometry']['coordinates']
-        bar_longitude = bar_coordinates[0]
         bar_latitude = bar_coordinates[1]
+        bar_longitude = bar_coordinates[0]
 
-        return ((bar_longitude - longitude) ** 2 + (
-                bar_latitude - latitude) ** 2) ** 0.5
+        return ((bar_latitude - latitude) ** 2 + (
+                bar_longitude - longitude) ** 2) ** 0.5
 
     return calculate
 
 
-def get_nearest_bar(list_bars, longitude, latitude):
-    get_distance_to_bar = calculate_distance_to_bar(longitude, latitude)
+def get_nearest_bar(list_bars, latitude, longitude):
+    get_distance_to_bar = create_calculator_of_distance_to_bar(latitude,
+                                                               longitude)
 
     return min(list_bars, key=get_distance_to_bar)
 
