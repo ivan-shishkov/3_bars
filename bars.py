@@ -22,11 +22,19 @@ def get_smallest_bar(list_bars):
     return min(list_bars, key=get_seats_count_in_bar)
 
 
+def get_bar_coordinates(bar):
+    bar_coordinates = bar['geometry']['coordinates']
+    bar_latitude = bar_coordinates[1]
+    bar_longitude = bar_coordinates[0]
+
+    return {'latitude': bar_latitude, 'longitude': bar_longitude}
+
+
 def create_calculator_of_distance_to_bar(latitude, longitude):
     def calculate(bar):
-        bar_coordinates = bar['geometry']['coordinates']
-        bar_latitude = bar_coordinates[1]
-        bar_longitude = bar_coordinates[0]
+        bar_coordinates = get_bar_coordinates(bar)
+        bar_latitude = bar_coordinates['latitude']
+        bar_longitude = bar_coordinates['longitude']
 
         return ((bar_latitude - latitude) ** 2 + (
                 bar_longitude - longitude) ** 2) ** 0.5
@@ -55,10 +63,10 @@ def print_bar_info(bar, feature):
     print('Адрес: ', bar_info['Address'])
     print('Телефон: ', bar_info['PublicPhone'][0]['PublicPhone'])
 
-    bar_coordinates = bar['geometry']['coordinates']
-    latitude = bar_coordinates[1]
-    longitude = bar_coordinates[0]
-    print('Координаты: {} с.ш.  {} в.д.'.format(latitude, longitude))
+    bar_coordinates = get_bar_coordinates(bar)
+    bar_latitude = bar_coordinates['latitude']
+    bar_longitude = bar_coordinates['longitude']
+    print('Координаты: {} с.ш.  {} в.д.'.format(bar_latitude, bar_longitude))
 
 
 def parse_command_line_arguments():
