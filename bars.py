@@ -43,9 +43,11 @@ def create_calculator_of_distance_to_bar(latitude, longitude):
 
 
 def get_info_about_nearest_bar(list_of_bars, latitude, longitude):
-    get_distance_to_bar = create_calculator_of_distance_to_bar(latitude,
-                                                               longitude)
-
+    # генерация функции расчёта расстояния от заданной точки до бара
+    get_distance_to_bar = create_calculator_of_distance_to_bar(
+        latitude=latitude,
+        longitude=longitude,
+    )
     return min(list_of_bars, key=get_distance_to_bar)
 
 
@@ -65,25 +67,31 @@ def print_info_about_bar(bar, feature):
     bar_coordinates = get_bar_coordinates(bar)
     bar_latitude = bar_coordinates['latitude']
     bar_longitude = bar_coordinates['longitude']
-    print('Координаты: {:.6f} с.ш.  {:.6f} в.д.'.format(bar_latitude,
-                                                        bar_longitude))
+    print('Координаты: {:.6f} с.ш.  {:.6f} в.д.'.format(
+        bar_latitude,
+        bar_longitude,
+    ))
 
 
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('filename',
-                        help='json файл, загруженный с http://data.mos.ru, '
-                             'с данными о барах',
-                        type=str)
-    parser.add_argument('latitude',
-                        help='Широта вашего местоположения в градусах, '
-                             'например 55.443322',
-                        type=float)
-    parser.add_argument('longitude',
-                        help='Долгота вашего местоположения в градусах, '
-                             'например 37.223344',
-                        type=float)
+    parser.add_argument(
+        'filename',
+        help='json файл, загруженный с https://apidata.mos.ru, '
+             'с данными о барах',
+        type=str,
+    )
+    parser.add_argument(
+        'latitude',
+        help='Широта вашего местоположения в градусах, например 55.443322',
+        type=float,
+    )
+    parser.add_argument(
+        'longitude',
+        help='Долгота вашего местоположения в градусах, например 37.223344',
+        type=float,
+    )
 
     arguments_from_command_line = parser.parse_args()
 
@@ -113,16 +121,20 @@ def run_script():
 
     list_of_bars = file_content['features']
 
-    print_info_about_bar(bar=get_info_about_biggest_bar(list_of_bars),
-                         feature='Самый большой бар:')
+    print_info_about_bar(
+        bar=get_info_about_biggest_bar(list_of_bars),
+        feature='Самый большой бар:',
+    )
 
-    print_info_about_bar(bar=get_info_about_smallest_bar(list_of_bars),
-                         feature='Самый маленький бар:')
+    print_info_about_bar(
+        bar=get_info_about_smallest_bar(list_of_bars),
+        feature='Самый маленький бар:',
+    )
 
-    print_info_about_bar(bar=get_info_about_nearest_bar(list_of_bars,
-                                                        latitude,
-                                                        longitude),
-                         feature='Самый ближайший бар:')
+    print_info_about_bar(
+        bar=get_info_about_nearest_bar(list_of_bars, latitude, longitude),
+        feature='Самый ближайший бар:',
+    )
 
 
 if __name__ == '__main__':
