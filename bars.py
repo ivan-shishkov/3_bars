@@ -14,12 +14,12 @@ def get_seats_count_in_bar(bar):
     return bar['properties']['Attributes']['SeatsCount']
 
 
-def get_biggest_bar(list_bars):
-    return max(list_bars, key=get_seats_count_in_bar)
+def get_info_about_biggest_bar(list_of_bars):
+    return max(list_of_bars, key=get_seats_count_in_bar)
 
 
-def get_smallest_bar(list_bars):
-    return min(list_bars, key=get_seats_count_in_bar)
+def get_info_about_smallest_bar(list_of_bars):
+    return min(list_of_bars, key=get_seats_count_in_bar)
 
 
 def get_bar_coordinates(bar):
@@ -31,7 +31,7 @@ def get_bar_coordinates(bar):
 
 
 def create_calculator_of_distance_to_bar(latitude, longitude):
-    def calculate(bar):
+    def calculate_distance_to_bar(bar):
         bar_coordinates = get_bar_coordinates(bar)
         bar_latitude = bar_coordinates['latitude']
         bar_longitude = bar_coordinates['longitude']
@@ -39,20 +39,19 @@ def create_calculator_of_distance_to_bar(latitude, longitude):
         return ((bar_latitude - latitude) ** 2 + (
                 bar_longitude - longitude) ** 2) ** 0.5
 
-    return calculate
+    return calculate_distance_to_bar
 
 
-def get_nearest_bar(list_bars, latitude, longitude):
+def get_info_about_nearest_bar(list_of_bars, latitude, longitude):
     get_distance_to_bar = create_calculator_of_distance_to_bar(latitude,
                                                                longitude)
 
-    return min(list_bars, key=get_distance_to_bar)
+    return min(list_of_bars, key=get_distance_to_bar)
 
 
-def print_bar_info(bar, feature):
+def print_info_about_bar(bar, feature):
     print('\n' + '-' * 20)
-
-    print('Самый ' + feature + ' бар:')
+    print(feature)
     print('-' * 20)
 
     bar_info = bar['properties']['Attributes']
@@ -100,10 +99,13 @@ def run_script():
 
     list_bars = file_content['features']
 
-    print_bar_info(bar=get_biggest_bar(list_bars), feature='большой')
-    print_bar_info(bar=get_smallest_bar(list_bars), feature='маленький')
-    print_bar_info(bar=get_nearest_bar(list_bars, latitude, longitude),
-                   feature='ближайший')
+    print_info_about_bar(bar=get_info_about_biggest_bar(list_bars),
+                         feature='Самый большой бар:')
+    print_info_about_bar(bar=get_info_about_smallest_bar(list_bars),
+                         feature='Самый маленький бар:')
+    print_info_about_bar(
+        bar=get_info_about_nearest_bar(list_bars, latitude, longitude),
+        feature='Самый ближайший бар:')
 
 
 if __name__ == '__main__':
