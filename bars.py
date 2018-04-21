@@ -69,5 +69,25 @@ def parse_command_line_arguments():
             'longitude': args.longitude}
 
 
+def run_script():
+    arguments_from_command_line = parse_command_line_arguments()
+
+    filename = arguments_from_command_line['filename']
+    latitude = arguments_from_command_line['latitude']
+    longitude = arguments_from_command_line['longitude']
+
+    file_content = load_json_data(filename)
+
+    if not file_content:
+        print('Не найден файл с исходными данными')
+        return
+
+    list_bars = file_content['features']
+
+    print_bar_info(bar=get_biggest_bar(list_bars))
+    print_bar_info(bar=get_smallest_bar(list_bars))
+    print_bar_info(bar=get_nearest_bar(list_bars, latitude, longitude))
+
+
 if __name__ == '__main__':
-    pass
+    run_script()
