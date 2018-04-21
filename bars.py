@@ -72,16 +72,16 @@ def print_info_about_bar(bar, feature):
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('filename',
-                        help='json file downloaded from http://data.mos.ru '
-                             'with data about bars',
+                        help='json файл, загруженный с http://data.mos.ru, '
+                             'с данными о барах',
                         type=str)
     parser.add_argument('latitude',
-                        help='latitude of your location in degrees,'
-                             ' e.g. 55.443322',
+                        help='Широта вашего местоположения в градусах, '
+                             'например 55.443322',
                         type=float)
     parser.add_argument('longitude',
-                        help='longitude of your location in degrees, '
-                             'e.g. 37.223344',
+                        help='Долгота вашего местоположения в градусах, '
+                             'например 37.223344',
                         type=float)
     args = parser.parse_args()
     return {'filename': args.filename, 'latitude': args.latitude,
