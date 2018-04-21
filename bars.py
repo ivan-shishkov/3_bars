@@ -1,5 +1,6 @@
 import json
 import os
+import argparse
 
 
 def load_json_data(filepath):
@@ -50,6 +51,22 @@ def print_bar_info(bar):
 
     bar_coordinates = bar['geometry']['coordinates']
     print('Координаты: ', bar_coordinates[0], bar_coordinates[1])
+
+
+def parse_command_line_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename',
+                        help='json file downloaded from http://data.mos.ru with data about bars',
+                        type=str)
+    parser.add_argument('latitude',
+                        help='latitude of your location in degrees, e.g. 55.35721',
+                        type=float)
+    parser.add_argument('longitude',
+                        help='longitude of your location in degrees, e.g. 37.42145',
+                        type=float)
+    args = parser.parse_args()
+    return {'filename': args.filename, 'latitude': args.latitude,
+            'longitude': args.longitude}
 
 
 if __name__ == '__main__':
