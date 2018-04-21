@@ -21,6 +21,18 @@
 
 ```bash
 
+$ python3 bars.py -h
+usage: bars.py [-h] filename latitude longitude
+
+positional arguments:
+  filename    JSON файл, загруженный с https://apidata.mos.ru, с данными о барах
+  latitude    Широта вашего местоположения в градусах, например 55.443322
+  longitude   Долгота вашего местоположения в градусах, например 37.223344
+
+optional arguments:
+  -h, --help  show this help message and exit
+
+
 $ python3 bars.py bars.json 55.62146 37.41241
 
 --------------------
