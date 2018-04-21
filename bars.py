@@ -71,6 +71,7 @@ def print_info_about_bar(bar, feature):
 
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
+
     parser.add_argument('filename',
                         help='json файл, загруженный с http://data.mos.ru, '
                              'с данными о барах',
@@ -83,9 +84,14 @@ def parse_command_line_arguments():
                         help='Долгота вашего местоположения в градусах, '
                              'например 37.223344',
                         type=float)
-    args = parser.parse_args()
-    return {'filename': args.filename, 'latitude': args.latitude,
-            'longitude': args.longitude}
+
+    arguments_from_command_line = parser.parse_args()
+
+    return {
+        'filename': arguments_from_command_line.filename,
+        'latitude': arguments_from_command_line.latitude,
+        'longitude': arguments_from_command_line.longitude,
+    }
 
 
 def run_script():
@@ -101,15 +107,18 @@ def run_script():
         print('Не найден файл с исходными данными')
         return
 
-    list_bars = file_content['features']
+    list_of_bars = file_content['features']
 
-    print_info_about_bar(bar=get_info_about_biggest_bar(list_bars),
+    print_info_about_bar(bar=get_info_about_biggest_bar(list_of_bars),
                          feature='Самый большой бар:')
-    print_info_about_bar(bar=get_info_about_smallest_bar(list_bars),
+
+    print_info_about_bar(bar=get_info_about_smallest_bar(list_of_bars),
                          feature='Самый маленький бар:')
-    print_info_about_bar(
-        bar=get_info_about_nearest_bar(list_bars, latitude, longitude),
-        feature='Самый ближайший бар:')
+
+    print_info_about_bar(bar=get_info_about_nearest_bar(list_of_bars,
+                                                        latitude,
+                                                        longitude),
+                         feature='Самый ближайший бар:')
 
 
 if __name__ == '__main__':
