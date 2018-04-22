@@ -102,7 +102,7 @@ def parse_command_line_arguments():
     }
 
 
-def run_script():
+def main():
     arguments_from_command_line = parse_command_line_arguments()
 
     filename = arguments_from_command_line['filename']
@@ -138,4 +138,4 @@ def run_script():
 
 
 if __name__ == '__main__':
-    run_script()
+    main()
