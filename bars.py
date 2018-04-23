@@ -2,6 +2,7 @@ import json
 import os.path
 import argparse
 from functools import partial
+import sys
 
 
 def load_json_data(filepath):
@@ -111,12 +112,10 @@ def main():
     try:
         file_content = load_json_data(filename)
     except (UnicodeDecodeError, json.JSONDecodeError):
-        print('Неверный формат файла json')
-        return
+        sys.exit('Неверный формат файла json')
 
     if not file_content:
-        print('Не найден файл с исходными данными')
-        return
+        sys.exit('Не найден файл с исходными данными')
 
     list_of_bars = file_content['features']
 
