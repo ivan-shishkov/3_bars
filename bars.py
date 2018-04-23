@@ -52,17 +52,16 @@ def get_info_about_nearest_bar(list_of_bars, latitude, longitude):
 
 
 def print_info_about_bar(bar, feature):
-    print('\n' + '-' * 20)
-    print(feature)
-    print('-' * 20)
+    print()
+    print('{:-^30}'.format(feature))
 
     bar_info = bar['properties']['Attributes']
-    print('Название: ', bar_info['Name'])
-    print('Количество мест: ', bar_info['SeatsCount'])
-    print('Административный округ: ', bar_info['AdmArea'])
-    print('Район: ', bar_info['District'])
-    print('Адрес: ', bar_info['Address'])
-    print('Телефон: ', bar_info['PublicPhone'][0]['PublicPhone'])
+    print('Название: {}'.format(bar_info['Name']))
+    print('Количество мест: {}'.format(bar_info['SeatsCount']))
+    print('Административный округ: {}'.format(bar_info['AdmArea']))
+    print('Район: {}'.format(bar_info['District']))
+    print('Адрес: {}'.format(bar_info['Address']))
+    print('Телефон: {}'.format(bar_info['PublicPhone'][0]['PublicPhone']))
 
     bar_coordinates = get_bar_coordinates(bar)
     bar_latitude = bar_coordinates['latitude']
