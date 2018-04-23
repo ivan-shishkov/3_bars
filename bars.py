@@ -12,28 +12,28 @@ def load_json_data(filepath):
         return json.load(file)
 
 
-def get_seats_count_in_bar(bar):
-    return bar['properties']['Attributes']['SeatsCount']
+def get_seats_count_in_bar(bar_info):
+    return bar_info['properties']['Attributes']['SeatsCount']
 
 
-def get_info_about_biggest_bar(list_of_bars):
-    return max(list_of_bars, key=get_seats_count_in_bar)
+def get_biggest_bar_info(bars_info):
+    return max(bars_info, key=get_seats_count_in_bar)
 
 
-def get_info_about_smallest_bar(list_of_bars):
-    return min(list_of_bars, key=get_seats_count_in_bar)
+def get_smallest_bar_info(bars_info):
+    return min(bars_info, key=get_seats_count_in_bar)
 
 
-def get_bar_coordinates(bar):
-    bar_coordinates = bar['geometry']['coordinates']
+def get_bar_coordinates(bar_info):
+    bar_coordinates = bar_info['geometry']['coordinates']
     bar_latitude = bar_coordinates[1]
     bar_longitude = bar_coordinates[0]
 
     return {'latitude': bar_latitude, 'longitude': bar_longitude}
 
 
-def calculate_distance_to_bar(bar, latitude, longitude):
-    bar_coordinates = get_bar_coordinates(bar)
+def calculate_distance_to_bar(bar_info, latitude, longitude):
+    bar_coordinates = get_bar_coordinates(bar_info)
     bar_latitude = bar_coordinates['latitude']
     bar_longitude = bar_coordinates['longitude']
 
@@ -41,30 +41,32 @@ def calculate_distance_to_bar(bar, latitude, longitude):
             bar_longitude - longitude) ** 2) ** 0.5
 
 
-def get_info_about_nearest_bar(list_of_bars, latitude, longitude):
+def get_nearest_bar_info(bars_info, user_latitude, user_longitude):
     return min(
-        list_of_bars,
+        bars_info,
         key=partial(
             calculate_distance_to_bar,
-            latitude=latitude,
-            longitude=longitude,
+            latitude=user_latitude,
+            longitude=user_longitude,
         ),
     )
 
 
-def print_info_about_bar(bar, feature):
+def print_bar_info(bar_info, feature):
     print()
     print('{:-^30}'.format(feature))
 
-    bar_info = bar['properties']['Attributes']
-    print('Название: {}'.format(bar_info['Name']))
-    print('Количество мест: {}'.format(bar_info['SeatsCount']))
-    print('Административный округ: {}'.format(bar_info['AdmArea']))
-    print('Район: {}'.format(bar_info['District']))
-    print('Адрес: {}'.format(bar_info['Address']))
-    print('Телефон: {}'.format(bar_info['PublicPhone'][0]['PublicPhone']))
+    bar_info_attributes = bar_info['properties']['Attributes']
+    print('Название: {}'.format(bar_info_attributes['Name']))
+    print('Количество мест: {}'.format(bar_info_attributes['SeatsCount']))
+    print('Административный округ: {}'.format(bar_info_attributes['AdmArea']))
+    print('Район: {}'.format(bar_info_attributes['District']))
+    print('Адрес: {}'.format(bar_info_attributes['Address']))
+    print('Телефон: {}'.format(
+        bar_info_attributes['PublicPhone'][0]['PublicPhone'],
+    ))
 
-    bar_coordinates = get_bar_coordinates(bar)
+    bar_coordinates = get_bar_coordinates(bar_info)
     bar_latitude = bar_coordinates['latitude']
     bar_longitude = bar_coordinates['longitude']
     print('Координаты: {:.6f} с.ш.  {:.6f} в.д.'.format(
@@ -93,44 +95,48 @@ def parse_command_line_arguments():
         type=float,
     )
 
-    arguments_from_command_line = parser.parse_args()
+    command_line_arguments = parser.parse_args()
 
     return {
-        'filename': arguments_from_command_line.filename,
-        'latitude': arguments_from_command_line.latitude,
-        'longitude': arguments_from_command_line.longitude,
+        'filename': command_line_arguments.filename,
+        'latitude': command_line_arguments.latitude,
+        'longitude': command_line_arguments.longitude,
     }
 
 
 def main():
-    arguments_from_command_line = parse_command_line_arguments()
+    command_line_arguments = parse_command_line_arguments()
 
-    filename = arguments_from_command_line['filename']
-    latitude = arguments_from_command_line['latitude']
-    longitude = arguments_from_command_line['longitude']
+    filename = command_line_arguments['filename']
+    user_latitude = command_line_arguments['latitude']
+    user_longitude = command_line_arguments['longitude']
 
     try:
-        file_content = load_json_data(filename)
+        json_file_content = load_json_data(filename)
     except (UnicodeDecodeError, json.JSONDecodeError):
         sys.exit('Неверный формат файла json')
 
-    if not file_content:
+    if not json_file_content:
         sys.exit('Не найден файл с исходными данными')
 
-    list_of_bars = file_content['features']
+    bars_info = json_file_content['features']
 
-    print_info_about_bar(
-        bar=get_info_about_biggest_bar(list_of_bars),
+    print_bar_info(
+        bar_info=get_biggest_bar_info(bars_info),
         feature='Самый большой бар:',
     )
 
-    print_info_about_bar(
-        bar=get_info_about_smallest_bar(list_of_bars),
+    print_bar_info(
+        bar_info=get_smallest_bar_info(bars_info),
         feature='Самый маленький бар:',
     )
 
-    print_info_about_bar(
-        bar=get_info_about_nearest_bar(list_of_bars, latitude, longitude),
+    print_bar_info(
+        bar_info=get_nearest_bar_info(
+            bars_info,
+            user_latitude,
+            user_longitude,
+        ),
         feature='Самый ближайший бар:',
     )
 
