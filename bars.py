@@ -1,6 +1,7 @@
 import json
 import os.path
 import argparse
+from functools import partial
 
 
 def load_json_data(filepath):
@@ -30,25 +31,24 @@ def get_bar_coordinates(bar):
     return {'latitude': bar_latitude, 'longitude': bar_longitude}
 
 
-def create_calculator_of_distance_to_bar(latitude, longitude):
-    def calculate_distance_to_bar(bar):
-        bar_coordinates = get_bar_coordinates(bar)
-        bar_latitude = bar_coordinates['latitude']
-        bar_longitude = bar_coordinates['longitude']
+def calculate_distance_to_bar(bar, latitude, longitude):
+    bar_coordinates = get_bar_coordinates(bar)
+    bar_latitude = bar_coordinates['latitude']
+    bar_longitude = bar_coordinates['longitude']
 
-        return ((bar_latitude - latitude) ** 2 + (
-                bar_longitude - longitude) ** 2) ** 0.5
-
-    return calculate_distance_to_bar
+    return ((bar_latitude - latitude) ** 2 + (
+            bar_longitude - longitude) ** 2) ** 0.5
 
 
 def get_info_about_nearest_bar(list_of_bars, latitude, longitude):
-    # генерация функции расчёта расстояния от заданной точки до бара
-    get_distance_to_bar = create_calculator_of_distance_to_bar(
-        latitude=latitude,
-        longitude=longitude,
+    return min(
+        list_of_bars,
+        key=partial(
+            calculate_distance_to_bar,
+            latitude=latitude,
+            longitude=longitude,
+        ),
     )
-    return min(list_of_bars, key=get_distance_to_bar)
 
 
 def print_info_about_bar(bar, feature):
