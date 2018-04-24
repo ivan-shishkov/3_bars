@@ -24,18 +24,8 @@ def get_smallest_bar_info(bars_info):
     return min(bars_info, key=get_seats_count_in_bar)
 
 
-def get_bar_coordinates(bar_info):
-    bar_coordinates = bar_info['geometry']['coordinates']
-    bar_latitude = bar_coordinates[1]
-    bar_longitude = bar_coordinates[0]
-
-    return {'latitude': bar_latitude, 'longitude': bar_longitude}
-
-
 def calculate_distance_to_bar(bar_info, latitude, longitude):
-    bar_coordinates = get_bar_coordinates(bar_info)
-    bar_latitude = bar_coordinates['latitude']
-    bar_longitude = bar_coordinates['longitude']
+    bar_longitude, bar_latitude = bar_info['geometry']['coordinates']
 
     return ((bar_latitude - latitude) ** 2 + (
             bar_longitude - longitude) ** 2) ** 0.5
@@ -66,9 +56,7 @@ def print_bar_info(bar_info, feature):
         bar_info_attributes['PublicPhone'][0]['PublicPhone'],
     ))
 
-    bar_coordinates = get_bar_coordinates(bar_info)
-    bar_latitude = bar_coordinates['latitude']
-    bar_longitude = bar_coordinates['longitude']
+    bar_longitude, bar_latitude = bar_info['geometry']['coordinates']
     print('Координаты: {:.6f} с.ш.  {:.6f} в.д.'.format(
         bar_latitude,
         bar_longitude,
