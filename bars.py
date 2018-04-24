@@ -85,19 +85,15 @@ def parse_command_line_arguments():
 
     command_line_arguments = parser.parse_args()
 
-    return {
-        'filename': command_line_arguments.filename,
-        'latitude': command_line_arguments.latitude,
-        'longitude': command_line_arguments.longitude,
-    }
+    return command_line_arguments
 
 
 def main():
     command_line_arguments = parse_command_line_arguments()
 
-    filename = command_line_arguments['filename']
-    user_latitude = command_line_arguments['latitude']
-    user_longitude = command_line_arguments['longitude']
+    filename = command_line_arguments.filename
+    user_latitude = command_line_arguments.latitude
+    user_longitude = command_line_arguments.longitude
 
     try:
         json_file_content = load_json_data(filename)
