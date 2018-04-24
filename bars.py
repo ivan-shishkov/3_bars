@@ -96,14 +96,14 @@ def main():
     user_longitude = command_line_arguments.longitude
 
     try:
-        json_file_content = load_json_data(filename)
+        bars_data = load_json_data(filename)
     except (UnicodeDecodeError, json.JSONDecodeError):
         sys.exit('Неверный формат файла json')
 
-    if not json_file_content:
+    if not bars_data:
         sys.exit('Не найден файл с исходными данными')
 
-    bars_info = json_file_content['features']
+    bars_info = bars_data['features']
 
     print_bar_info(
         bar_info=get_biggest_bar_info(bars_info),
